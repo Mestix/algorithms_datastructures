@@ -31,4 +31,9 @@ namespace AD
     {
         // Is thrown when Remove is called on an empty queue
     }
+   
+   public class PriorityQueueFullException : System.Exception
+   {
+       // Is thrown when add is called on an full queue
+   }
 }

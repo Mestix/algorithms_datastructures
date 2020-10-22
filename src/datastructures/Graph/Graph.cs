@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 
 
 namespace AD
@@ -7,7 +10,6 @@ namespace AD
     public partial class Graph : IGraph
     {
         public static readonly double INFINITY = System.Double.MaxValue;
-
         public Dictionary<string, Vertex> vertexMap;
 
 
@@ -17,9 +19,8 @@ namespace AD
 
         public Graph()
         {
-            throw new System.NotImplementedException();
+            vertexMap = new Dictionary<string, Vertex>();
         }
-
 
         //----------------------------------------------------------------------
         // Interface methods that have to be implemented for exam
@@ -32,9 +33,9 @@ namespace AD
         /// <param name="name">The name of the new vertex</param>
         public void AddVertex(string name)
         {
-            throw new System.NotImplementedException();
+            if (vertexMap.ContainsKey(name)) return;
+            vertexMap.Add(name, new Vertex(name));
         }
-
 
         /// <summary>
         ///    Gets a vertex from the graph by name. If no such vertex exists,
@@ -44,7 +45,9 @@ namespace AD
         /// <returns>The vertex withe the given name</returns>
         public Vertex GetVertex(string name)
         {
-            throw new System.NotImplementedException();
+            if (vertexMap.ContainsKey(name)) return vertexMap[name];
+            AddVertex(name);
+            return vertexMap[name];
         }
 
 
@@ -58,7 +61,9 @@ namespace AD
         /// <param name="cost">cost of the edge</param>
         public void AddEdge(string source, string dest, double cost = 1)
         {
-            throw new System.NotImplementedException();
+            Vertex s = GetVertex(source);
+            Vertex d = GetVertex(dest);
+            s.adj.AddLast(new Edge(d, cost));
         }
 
 
@@ -68,16 +73,42 @@ namespace AD
         /// </summary>
         public void ClearAll()
         {
-            throw new System.NotImplementedException();
+            foreach(Vertex v in vertexMap.Values)
+            {
+                v.Reset();
+            }
         }
 
         /// <summary>
-        ///    Performs the Breatch-First algorithm for unweighted graphs.
+        ///    Performs the Breath-First algorithm for unweighted graphs.
         /// </summary>
         /// <param name="name">The name of the starting vertex</param>
         public void Unweighted(string name)
         {
-            throw new System.NotImplementedException();
+            ClearAll(); // reset all distances and knowns
+            
+            Queue<Vertex> queue = new Queue<Vertex>();
+            Vertex start = GetVertex(name); // get start vertex
+            
+            start.distance = 0; // distance to start vertex is 0
+            
+            queue.Enqueue(start); // add start vertex to queue
+
+            while (queue.Any()) // while there are vertexes in queue
+            {
+                Vertex prev = queue.Dequeue(); // get Vertex from front of queue
+                
+                foreach (Edge e in prev.adj) // for all connected vertexes
+                {
+                    Vertex next = e.dest;
+                    if (next.distance == INFINITY) // if distance is not already set
+                    {
+                        next.distance = prev.distance + 1; // add previous vertex distance plus 1
+                        queue.Enqueue(next); // add next to queue
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -86,7 +117,36 @@ namespace AD
         /// <param name="name">The name of the starting vertex</param>
         public void Dijkstra(string name)
         {
-            throw new System.NotImplementedException();
+            ClearAll(); // reset al distances and knowns
+            
+            PriorityQueue<Vertex> queue = new PriorityQueue<Vertex>();
+            Vertex start = GetVertex(name); // get start vertex
+            
+            start.distance = 0; // distance to start vertex is 0
+            
+            queue.Add(start); // add start vertex to queue
+
+            while (!queue.IsEmpty()) // while there are vertex in queue
+            {
+                Vertex prev = queue.Remove(); // get vertex with smallest distance
+                if (prev.known == false) // if not already visited, continue
+                {
+                    prev.known = true; // visited is true
+
+                    foreach (Edge edge in prev.adj) // for all connected vertexes
+                    {
+                        Vertex next = edge.dest;
+                        double newDistance = prev.distance + edge.cost; // distance from previous vertex
+
+                        if (newDistance < next.distance) // if the new calculated distance is shorter then the registered distance
+                        {
+                            next.distance = newDistance; // set new distance
+                            next.prev = prev; // set new previous vertex
+                        }
+                        queue.Add(next); // add next vertex to queue
+                    }
+                }
+            }
         }
 
         //----------------------------------------------------------------------
@@ -101,7 +161,13 @@ namespace AD
         /// <returns>The string representation of this Graph instance</returns>
         public override string ToString()
         {
-            throw new System.NotImplementedException();
+            string result = "";
+            foreach (string key in vertexMap.Keys.OrderBy(x => x))
+            {
+                result += vertexMap[key].ToString();
+            }
+
+            return result;
         }
 
 

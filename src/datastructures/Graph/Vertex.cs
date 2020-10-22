@@ -5,14 +5,13 @@ using System.Linq;
 
 namespace AD
 {
-    public partial class Vertex : IVertex
+    public partial class Vertex : IVertex, IComparable<Vertex>
     {
         public string name;
         public LinkedList<Edge> adj;
         public double distance;
         public Vertex prev;
         public bool known;
-
 
         //----------------------------------------------------------------------
         // Constructor
@@ -24,9 +23,10 @@ namespace AD
         /// <param name="name">The name of the new vertex</param>
         public Vertex(string name)
         {
-            throw new System.NotImplementedException();
+            this.name = name;
+            adj = new LinkedList<Edge>();
+            distance = Graph.INFINITY;
         }
-
 
         //----------------------------------------------------------------------
         // Interface methods that have to be implemented for exam
@@ -34,37 +34,49 @@ namespace AD
 
         public string GetName()
         {
-            throw new System.NotImplementedException();
+            return name;
         }
         public LinkedList<Edge> GetAdjacents()
         {
-            throw new System.NotImplementedException();
+            return adj;
         }
 
         public double GetDistance()
         {
-            throw new System.NotImplementedException();
+            return distance;
         }
 
         public Vertex GetPrevious()
         {
-            throw new System.NotImplementedException();
+            return prev;
         }
 
         public bool GetKnown()
         {
-            throw new System.NotImplementedException();
+            return known;
         }
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+            distance = Graph.INFINITY;
+            known = false;
+            prev = null;
         }
 
 
         //----------------------------------------------------------------------
         // ToString that has to be implemented for exam
         //----------------------------------------------------------------------
+
+        public int CompareTo(Vertex other)
+        {
+            /*
+             <0 = other.distance > this.distance
+             >0 = other.distance < this.distance
+             equal = same distance
+             */
+            return distance.CompareTo(other.distance);
+        }
 
         /// <summary>
         ///    Converts this instance of Vertex to its string representation.
@@ -75,7 +87,27 @@ namespace AD
         /// <returns>The string representation of this Graph instance</returns> 
         public override string ToString()
         {
-            throw new System.NotImplementedException();
+            string result = name;
+            if (distance != Graph.INFINITY)
+            {
+                result += " (" + distance + ")";
+            }
+
+            result += " [";
+
+            if (adj.Count > 0)
+            {
+                foreach (Edge edge in adj.OrderBy(x => x.dest.name))
+                {
+                    result += " " 
+                              + edge.dest.name 
+                              + " (" 
+                              + edge.cost 
+                              + ")";
+                }
+            }
+            result += " ]" + Environment.NewLine;
+            return result;
         }
     }
 }

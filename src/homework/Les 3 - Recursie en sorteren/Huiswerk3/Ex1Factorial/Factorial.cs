@@ -4,12 +4,21 @@
     {
         public static long FacRecursive(int n)
         {
-            throw new System.NotImplementedException();
+            if (n == 1) return n;
+            return FacRecursive(n - 1) * n;
         }
 
         public static long FacIterative(int n)
         {
-            throw new System.NotImplementedException();
+            if (n == 1) return 1;
+            long sum = 1;
+
+            while (n > 0)
+            {
+                sum *= n--;
+            }
+            
+            return sum;
         }
 
         public static void Run()

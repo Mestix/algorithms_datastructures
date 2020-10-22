@@ -109,10 +109,10 @@
 
         static void Main(string[] args)
         {
-            Opgave1();
+            // Opgave1();
             Opgave2();
-            Opgave3();
-            Opgave4();
+            // Opgave3();
+            // Opgave4();
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace AD
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace AD
 {
     public class Opgave2
     {
@@ -7,7 +10,8 @@
         private static long FibonacciRecursiveInternal(int n)
         {
             calls++;
-            throw new System.NotImplementedException();
+            if (n <= 2) return 1;
+            return FibonacciRecursiveInternal( n - 1 ) + FibonacciRecursiveInternal( n - 2 );
         }
 
         public static long FibonacciRecursive(int n)
@@ -18,7 +22,20 @@
 
         private static long FibonacciIterativeInternal(int n)
         {
-            throw new System.NotImplementedException();
+            if (n == 1) return 1;
+
+            int t1 = 0;
+            int t2 = 1;
+            int sum = 0;
+            
+            for (int i = 1; i < n; i++)
+            {
+                sum = t1 + t2;
+                t1 = t2;
+                t2 = sum;
+            }
+
+            return sum;
         }
 
         public static long FibonacciIterative(int n)

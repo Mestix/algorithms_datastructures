@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -370,6 +371,7 @@ namespace AD
             // Act
             graph.Unweighted("v3");
             string actual = TestUtils.TrimmedStringWithoutSpaces(graph.ToString());
+            Console.Write(graph);
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -416,7 +418,7 @@ namespace AD
             // Act
             graph.Dijkstra("V0");
             string actual = TestUtils.TrimmedStringWithoutSpaces(graph.ToString());
-
+            Console.Write(graph);
             // Assert
             Assert.AreEqual(expected, actual);
         }

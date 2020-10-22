@@ -8,27 +8,29 @@ namespace AD
 
         public FCNSNode(T data, FCNSNode<T> firstChild, FCNSNode<T> nextSibling)
         {
-            throw new System.NotImplementedException();
+            this.data = data;
+            this.firstChild = firstChild;
+            this.nextSibling = nextSibling;
         }
 
         public FCNSNode(T data)
         {
-            throw new System.NotImplementedException();
+            this.data = data;
         }
 
         public T GetData()
         {
-            throw new System.NotImplementedException();
+            return data;
         }
 
         public FCNSNode<T> GetFirstChild()
         {
-            throw new System.NotImplementedException();
+            return firstChild;
         }
 
         public FCNSNode<T> GetNextSibling()
         {
-            throw new System.NotImplementedException();
+            return nextSibling;
         }
     }
 }
